@@ -29,7 +29,7 @@ sin = np.sin
 cos = np.cos
 arcsin = np.arcsin
 arccos = np.arccos
-arctan = np.arctan
+arctan = np.arctan2
 norm = np.linalg.norm
 #list of parameters per joint [r, d, alpha]
 NUM_JOINTS = 6
@@ -111,10 +111,12 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 													0]) 
 
 	# Step 3: find theta_1
-	d = norm(wrist_center * [1,1,0])
 	x, y = wrist_center[0], wrist_center[1]
+	d = np.sqrt(x*x + y*y)
+	
 	rectL = LL[1] - LL[3] + LL[5]
-	angles[0] = HALF_PI - arctan(y / x) - arcsin(rectL / d)
+	angles[0] = arctan(y, x) - arcsin(rectL / d)
+	#HALF_PI - arctan(y, x) - arcsin(rectL / d)
 
 	# Step 4: find theta_6 
 		# based on theta 1 and yaw angle, equals 0 when 9 parallel to 4 and 6
