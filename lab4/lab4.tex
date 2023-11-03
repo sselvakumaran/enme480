@@ -1,0 +1,150 @@
+\documentclass{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb}
+\usepackage[export]{adjustbox}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{doi}
+\usepackage{cite}
+\usepackage{enumitem}
+\usepackage[table,x11names]{xcolor}
+\usepackage{tikz}
+\usepackage{tabu}
+
+% Margins
+\usepackage[top=1cm, left=1.5cm, right=1.5cm, bottom=1.5cm]{geometry}
+% Colour table cells
+
+\usepackage{algpseudocode}
+
+% Get larger line spacing in table
+\newcommand{\tablespace}{\\[1.25mm]}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}         % = `top' strut
+\newcommand\tstrut{\rule{0pt}{2.0ex}}         % = `top' strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}   % = `bottom' strut
+
+\setcounter{section}{0}
+\usepackage{titlesec}
+
+\titlespacing{\section}{0pt}{4pt}{12pt}
+\titlespacing{\subsection}{0pt}{0pt}{3pt}
+
+\titleformat{\section}[runin] 
+  {\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[runin]
+  {\large\normalfont}{}{-0cm}{\raggedleft}
+\newcommand{\ans}[1]{{\large\color{blue}{#1}}}
+\newcommand{\ansalign}[1]{{\large\color{blue}{\begin{align*}#1\end{align*}}}}
+
+%%%%%%%%%%%%%%%%%
+\title{Lab 4 Deliverables}
+\author{ENME480 (Mercado) \\ Group 0102-6}
+\date{October 20th, 2023}
+
+\graphicspath{{./}}
+
+\begin{document}
+\maketitle
+
+%%%%% ABSTRACT
+\section*{Contributions (overview)}\ans{\quad\\
+Adithya: DH tables, lab measurements, FK / measured analysis\\
+Sriman: Report, Python code, DH tables\\
+Brandon: DH tables, lab measurements\\
+Eric: lab measurements
+}
+\section*{DH table exercise}\ans{Assuming angles are in degrees.\\
+\begin{minipage}[t]{0.25\textwidth}
+2 DoF configuration\\
+\begin{tabular}{r|llll}
+link & $d$ & $\theta$ & $r$ & $\alpha$\\
+\hline
+0 & 0 & $\theta_1$ & $a_1$ & 0 \\
+1 & 0 & $\theta_2$ & $a_2$ & 0
+\end{tabular}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+3 DoF configuration\\
+\begin{tabular}{r|llll}
+link & $d$ & $\theta$ & $r$ & $\alpha$\\
+\hline
+0 & 0 & $\theta_0$ & 0 & 0 \\
+1 & $d_2$ & 0 & 0 & $-90$ \\
+2 & $d_3$ & 0 & 0 & 0
+\end{tabular}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+6 DoF configuration\\
+\begin{tabular}{r|llll}
+link & $d$ & $\theta$ & $r$ & $\alpha$\\
+\hline
+0 & 0 & $\theta_1$ & 0 & 90 \\
+1 & 0 & $\theta_2 + 90$ & 0 & -90 \\
+2 & 0 & $\theta_3$ & $D_3$ & 0 \\
+3 & 0 & $\theta_4$ & $L_3$ & 0 \\
+4 & 0 & $\theta_5$ & $L_5$ & 90 \\
+5 & 0 & $\theta_6$ & $L_6$ & 90
+\end{tabular}
+\end{minipage}
+}
+\section*{UR3e DH table}\ans{Assuming angles are in degrees.\\
+\begin{tabular}{r|llll}
+link & $d$ & $\theta$ & $r$ & $\alpha$\\
+\hline
+0 & 0.15185 & $\theta_0$ & 0.0 & 90 \\
+1 & 0.0 & $\theta_1$ & -0.24355 & 0 \\
+2 & 0.0 & $\theta_2$ & -0.2132 & 0 \\
+3 & 0.13105 & $\theta_3$ & 0.0 & 90 \\
+4 & 0.08535 & $\theta_4$ & 0.0 & -90 \\
+5 & 0.0921 & $\theta_5$ & 0.0 & 0
+\end{tabular}
+}
+\section*{Lab analysis}
+\subsection*{Data}\ans{\quad\\
+\begin{tabular}{rr|lll}
+point & value & $x$ & $y$ & $z$ \\
+\hline
+$[-20, -70, 110, -15, 0, 20]$ & calculated & 0.274 & 0.263 & 0.257 \\
+(demo point 1) & measured & 0.288 & 0.293 & 0.269 \\[5pt]
+$[-40, -60, 80, -10, -90, -30]$ & calculated & 0.221 & 0.043 & 0.152 \\
+(demo point 2) & measured & 0.231 & 0.062 & 0.153 \\[5pt]
+$[30, -70, 80, -10, -90, 10]$ & calculated & 0.103 & 0.484 & 0.213 \\
+(demo point 3) & measured & 0.104 & 0.504 & 0.215 \\[5pt]
+$[0, -30, 60, -60, -60, -60]$ & calculated & 0.332 & 0.354 & 0.102\\
+(demo point 4) & measured & 0.338 & 0.381 & 0.108
+\end{tabular}
+}
+\subsection*{Error calculations}\ans{\quad\\
+\begin{tabular}{r|l}
+demo point & error (m)\\
+\hline
+1 & 0.0352\\
+2 & 0.0215\\
+3 & 0.0201\\
+4 & 0.0283
+\end{tabular}
+}
+\subsection{Why Euclidean distance?}\ans{We used Euclidean distance since the error is in $\mathbb{R}^3$ since it represents the distance between the expected position of the end-effector and the actual values we got. We believe this is the best way to calculate error as it is the most literal difference between two points.}
+\subsection{Sources of error}\ans{The robot might be positioned somewhere offset from the grid other than the base frame, we might have measured the distances with human error, and we might not have been measuring from the true end-effector point.}
+\subsection{\texttt{ur3e\_df.py} vs. lab measurements}\ans{\quad\\
+\begin{tabular}{rr|lll}
+point & value & $x$ & $y$ & $z$ \\
+\hline
+$[-20, -70, 110, -15, 0, 20]$ & calculated & -0.274 & -0.138 & 0.166 \\
+(demo point 1) & measured & 0.288 & 0.293 & 0.269 \\[5pt]
+$[-40, -60, 80, -10, -90, -30]$ & calculated & -0.250 & 0.039 & 0.222 \\
+(demo point 2) & measured & 0.231 & 0.062 & 0.153 \\[5pt]
+$[30, -70, 80, -10, -90, 10]$ & calculated & -0.109 & 0.214 & 0.258 \\
+(demo point 3) & measured & 0.104 & 0.504 & 0.215 \\[5pt]
+$[0, -30, 60, -60, -60, -60]$ & calculated & -0.369 & -0.177 & 0.053\\
+(demo point 4) & measured & 0.338 & 0.381 & 0.108
+\end{tabular}\\
+Our code values are not perfect compared to the measured ones. Our $x$ axis value is constantly off by a factor of negative 1. Our $y$ values are off by a constant and so are our $z$ values. This could be because of some new ROS files that cause some bugs. This could also be based on discrepancies in our coordinate axis and grid. 
+}
+\section*{Code} \ans{See \texttt{ur3e\_df.py} and \texttt{lab3\_exec.py}.}
+
+\end{document}
