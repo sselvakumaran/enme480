@@ -78,14 +78,14 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	##### Your Code Ends Here #####
 	print(str(T) + "\n")
 
-	angles = theta + ANGLE_OFFSET[:6]
+	angles = theta + ANGLE_OFFSET
 	# angles[0] = theta1 + np.pi
 	# angles[1] = theta2
 	# angles[2] = theta3
 	# angles[3] = theta4 - (0.5*np.pi)
 	# angles[4] = theta5
 	# angles[5] = theta6
-	return angles
+	return angles[:6]
 
 BASE_COORD = np.array([-0.15, 0.15, 0.01])
 GRIPPER_PLATE_LENGTH = 0.0535
