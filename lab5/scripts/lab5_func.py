@@ -48,7 +48,7 @@ PARAMETERS_UR3 = [[0,       .1519, HALF_PI],
               [-.21325,  0,      0],
               [0,       .11235, HALF_PI],
               [0,       .08535, -HALF_PI],
-              [0,       .0921,  0],
+              [0,       .0819,  0],
 							[-.0535, 	.059, 	0]]
 
 trans_params = lambda theta, r, d, alpha: np.array(
