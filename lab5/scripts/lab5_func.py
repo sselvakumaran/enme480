@@ -51,13 +51,15 @@ PARAMETERS_UR3 = [[0,       .1519, HALF_PI],
               [0,       .0819,  0],
 							[-.0535, 	.059, 	0]]
 
+ANGLE_OFFSET = np.array([HALF_PI * 2, 0, 0, -HALF_PI, 0, 0, 0])
+
 trans_params = lambda theta, r, d, alpha: np.array(
   [[cos(theta), -sin(theta) * cos(alpha), sin(theta) * sin(alpha),  r * cos(theta)],
    [sin(theta), cos(theta) * cos(alpha),  -cos(theta) * sin(alpha), r * sin(theta)],
    [0,          sin(alpha),               cos(alpha),               d],
    [0,          0,                        0,                        1]])
 trans_theta_joint = lambda theta, joint_index: trans_params(
-  theta * np.pi / 180, 
+  theta * DEG_TO_RAD, 
   *(PARAMETERS_UR3[joint_index]))
 
 def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
@@ -65,7 +67,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	angles = [None, None, None, None, None, None]
 	print("Forward kinematics calculated:\n")
 
-	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6, 0])
+	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0] + ANGLE_OFFSET)
 	T = np.eye(4)
 
 	##### Your Code Starts Here #####
@@ -76,7 +78,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	##### Your Code Ends Here #####
 	print(str(T) + "\n")
 
-	angles = theta + [HALF_PI * 2, 0, 0, -HALF_PI, 0, 0]
+	angles = theta + ANGLE_OFFSET[:6]
 	# angles[0] = theta1 + np.pi
 	# angles[1] = theta2
 	# angles[2] = theta3
