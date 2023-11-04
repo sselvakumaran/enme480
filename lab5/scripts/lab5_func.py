@@ -21,8 +21,6 @@ def Get_M():
 	##### Your Code Ends Here #####
 	return M
 
-
-
 HALF_PI = np.pi / 2
 DEG_TO_RAD = np.pi / 180
 sin = np.sin
@@ -67,10 +65,9 @@ trans_theta_joint = lambda theta, joint_index: trans_params(
 
 def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	# Initialize the angles 
-	angles = [None, None, None, None, None, None]
 	print("Forward kinematics calculated:\n")
 
-	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0] + ANGLE_OFFSET)
+	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0])
 	T = np.eye(4)
 
 	##### Your Code Starts Here #####
@@ -81,18 +78,17 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	##### Your Code Ends Here #####
 	print(str(T) + "\n")
 
-	angles = theta + ANGLE_OFFSET
+	theta = theta + ANGLE_OFFSET
 	# angles[0] = theta1 + np.pi
 	# angles[1] = theta2
 	# angles[2] = theta3
 	# angles[3] = theta4 - (0.5*np.pi)
 	# angles[4] = theta5
 	# angles[5] = theta6
-	return angles[:6]
+	return theta[:6]
 
 def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
-	angles = np.array([0, 0, 0, 0, 0, 0])
-
+	angles = np.array([0, 0, 0, 0, 0, 0], dtype=float)
 	##### Your Code Starts Here #####
 	# TODO: Function that calculates an elbow up 
 	# inverse kinematics solution for the UR3
@@ -134,8 +130,6 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	angles[3] = -angles[1] - angles[2]
 
 	##### Your Code Ends Here #####
-
-	# print theta values (in degree) calculated from inverse kinematics
 	print(reduce(lambda x, y: x + f" {y / DEG_TO_RAD}", angles[1:], str(angles[0] / DEG_TO_RAD)))
 
 	# obtain angles from forward kinematics function
