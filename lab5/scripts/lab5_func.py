@@ -51,6 +51,9 @@ PARAMETERS_UR3 = [[0,       .1519, HALF_PI],
               [0,       .0819,  0],
 							[-.0535, 	.059, 	0]]
 
+LL = [0.152, 0.120, 0.244, 0.093, 0.213, 0.083, 0.083, 0.082, 0.0535, 0.052]
+BASE_COORD = np.array([-0.15, 0.15, 0.01])
+
 ANGLE_OFFSET = np.array([HALF_PI * 2, 0, 0, -HALF_PI, 0, 0, 0])
 
 trans_params = lambda theta, r, d, alpha: np.array(
@@ -87,11 +90,6 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	# angles[5] = theta6
 	return angles[:6]
 
-BASE_COORD = np.array([-0.15, 0.15, 0.01])
-GRIPPER_PLATE_LENGTH = 0.0535
-LL = [0.152, 0.120, 0.244, 0.083, 0.213, 0.083, 0.083, 0.082, 0.0535, 0.052]
-
-
 def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	angles = np.array([0, 0, 0, 0, 0, 0])
 
@@ -115,7 +113,7 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	d = np.sqrt(x*x + y*y)
 	
 	rectL = LL[1] - LL[3] + LL[5]
-	angles[0] = arctan(y, x) - arcsin(rectL / d)
+	angles[0] = HALF_PI - arctan(x, y) - arcsin(rectL / d)
 	#HALF_PI - arctan(y, x) - arcsin(rectL / d)
 
 	# Step 4: find theta_6 
@@ -123,16 +121,16 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	angles[5] = HALF_PI + angles[0] - yaw
 
 	# Step 5: find x3_end, y3_end, z3_end
-	x3 = wrist_center - [LL[7]*cos(angles[0]) - rectL * sin(angles[0]),
-											LL[7]*cos(angles[0]) - rectL * cos(angles[0]),
+	x3 = wrist_center - [LL[6]*cos(angles[0]) - rectL * sin(angles[0]),
+											LL[6]*sin(angles[0]) + rectL * cos(angles[0]),
 																							-LL[9] - LL[7]]
 
 	# Step 6: find theta_2, theta_3, theta_4
 	L1, L3, L5 = LL[0], LL[2], LL[4]
 	z = x3[2] - L1
 	l = norm(x3 - [0,0,L1])
-	angles[2] = -arccos((L3*L3+L5*L5-l*l) / (2*L3*L5))
-	angles[1] = -(arcsin(L3*sin(angles[2]) / l) + arcsin(z / l))
+	angles[2] = HALF_PI*2 - arccos((L3*L3+L5*L5-l*l) / (2*L3*L5))
+	angles[1] = -(arcsin(L5*sin(angles[2]) / l) + arcsin(z / l))
 	angles[3] = -angles[1] - angles[2]
 
 	##### Your Code Ends Here #####
