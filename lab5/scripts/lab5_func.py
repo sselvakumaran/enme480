@@ -68,7 +68,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	print("Forward kinematics calculated:\n")
 
 	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0], dtype=np.float64)
-	T = np.eye(4)
+	T = np.eye(4, dtype=np.float64)
 
 	##### Your Code Starts Here #####
 	# Fill in scripts from lab3 here
@@ -133,6 +133,6 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	print(reduce(lambda x, y: x + f" {y / DEG_TO_RAD}", angles[1:], str(angles[0] / DEG_TO_RAD)))
 
 	# obtain angles from forward kinematics function
-	angles2 = lab_fk(*(angles/DEG_TO_RAD))
-
+	angles1 = lab_fk(*(angles/DEG_TO_RAD))
+	print(angles1)
 	return angles + ANGLE_OFFSET[:6]
