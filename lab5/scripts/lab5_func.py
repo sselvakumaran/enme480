@@ -50,15 +50,15 @@ PARAMETERS_UR3 = [[0,       .1519, HALF_PI],
 							[-.0535, 	.059, 	0]]
 
 LL = [0.152, 0.120, 0.244, 0.093, 0.213, 0.083, 0.083, 0.082, 0.0535, 0.052]
-BASE_COORD = np.array([-0.15, 0.15, 0.01])
+BASE_COORD = np.array([-0.15, 0.15, 0.01], dtype=np.float64)
 
-ANGLE_OFFSET = np.array([HALF_PI * 2, 0, 0, -HALF_PI, 0, 0, 0])
+ANGLE_OFFSET = np.array([HALF_PI * 2, 0, 0, -HALF_PI, 0, 0, 0], dtype=np.float64)
 
 trans_params = lambda theta, r, d, alpha: np.array(
   [[cos(theta), -sin(theta) * cos(alpha), sin(theta) * sin(alpha),  r * cos(theta)],
    [sin(theta), cos(theta) * cos(alpha),  -cos(theta) * sin(alpha), r * sin(theta)],
    [0,          sin(alpha),               cos(alpha),               d],
-   [0,          0,                        0,                        1]])
+   [0,          0,                        0,                        1]], dtype=np.float32)
 trans_theta_joint = lambda theta, joint_index: trans_params(
   theta * DEG_TO_RAD, 
   *(PARAMETERS_UR3[joint_index]))
@@ -67,7 +67,7 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	# Initialize the angles 
 	print("Forward kinematics calculated:\n")
 
-	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0])
+	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0], dtype=np.float64)
 	T = np.eye(4)
 
 	##### Your Code Starts Here #####
@@ -88,21 +88,21 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	return theta[:6]
 
 def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
-	angles = np.array([0, 0, 0, 0, 0, 0], dtype=float)
+	angles = np.array([0, 0, 0, 0, 0, 0], dtype=np.float64)
 	##### Your Code Starts Here #####
 	# TODO: Function that calculates an elbow up 
 	# inverse kinematics solution for the UR3
 
 	# Step 1: find gripper position relative to the base of UR3,
 	# and set theta_5 equal to -pi/2
-	grip = np.array([xWgrip, yWgrip, zWgrip]) - BASE_COORD
+	grip = np.array([xWgrip, yWgrip, zWgrip], dtype=np.float64) - BASE_COORD
 	angles[4] = -HALF_PI
 
 	# Step 2: find x_cen, y_cen, z_cen
 	yaw = yaw_WgripDegree * DEG_TO_RAD
 	wrist_center = grip - np.array([LL[8] * cos(yaw), 
 													LL[8] * sin(yaw), 
-													0]) 
+													0], dtype=np.float64) 
 
 	# Step 3: find theta_1
 	x, y = wrist_center[0], wrist_center[1]
@@ -133,6 +133,6 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	print(reduce(lambda x, y: x + f" {y / DEG_TO_RAD}", angles[1:], str(angles[0] / DEG_TO_RAD)))
 
 	# obtain angles from forward kinematics function
-	angles = lab_fk(*angles)
+	angles2 = lab_fk(*(angles/DEG_TO_RAD))
 
-	return angles
+	return angles + ANGLE_OFFSET[:6]
