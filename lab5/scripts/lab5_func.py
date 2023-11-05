@@ -13,12 +13,6 @@ def Get_M():
 	# Initialize return values of M
 	M = np.eye(4)
 
-	##### Your Code Starts Here #####
-	# Fill in scripts from lab3 here
-
-	
-
-	##### Your Code Ends Here #####
 	return M
 
 HALF_PI = np.pi / 2
@@ -70,21 +64,12 @@ def lab_fk(theta1, theta2, theta3, theta4, theta5, theta6):
 	theta = np.array([theta1,theta2,theta3,theta4,theta5,theta6,0], dtype=np.float64)
 	T = np.eye(4, dtype=np.float64)
 
-	##### Your Code Starts Here #####
-	# Fill in scripts from lab3 here
 	for i in range(len(theta)):
 		T = np.matmul(T, trans_theta_joint(theta[i], i))
 
-	##### Your Code Ends Here #####
 	print(str(T) + "\n")
 
 	theta = theta * DEG_TO_RAD + ANGLE_OFFSET
-	# angles[0] = theta1 + np.pi
-	# angles[1] = theta2
-	# angles[2] = theta3
-	# angles[3] = theta4 - (0.5*np.pi)
-	# angles[4] = theta5
-	# angles[5] = theta6
 	return theta[:6]
 
 def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
@@ -132,5 +117,5 @@ def inverse_kinematics(xWgrip, yWgrip, zWgrip, yaw_WgripDegree):
 	print(reduce(lambda x, y: x + f" {y / DEG_TO_RAD}", angles[1:], str(angles[0] / DEG_TO_RAD)))
 
 	# obtain angles from forward kinematics function
-	#_ = lab_fk(*(angles/DEG_TO_RAD))
+	_ = lab_fk(*(angles/DEG_TO_RAD))
 	return angles + ANGLE_OFFSET[:6]
